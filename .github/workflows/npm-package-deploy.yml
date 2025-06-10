@@ -1,0 +1,37 @@
+name: npm Package Deploy
+
+on:
+  workflow_call:
+    secrets:
+      GH_DEPLOY_TOKEN:
+        required: true
+      NPM_ORG_OGS_GMBH_CI:
+        required: true
+    inputs:
+      release_please_config_file:
+        type: string
+        required: true
+      release_please_manifest_file:
+        type: string
+        required: true
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    uses: ./.github/workflows/npm-package-bump.yml
+    secrets:
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+    with:
+      config_file: ${{ inputs.release_please_config_file }}
+      manifest_file: ${{ inputs.release_please_manifest_file }}
+
+  publish:
+    needs: bump
+    if: ${{ needs.bump.outputs.release_created }}
+    uses: ./.github/workflows/npm-package-publish.yml
+    secrets:
+      NPM_ORG_OGS_GMBH_CI: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}

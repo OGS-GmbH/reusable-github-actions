@@ -1,0 +1,51 @@
+name: npm Package Bump
+
+on:
+  workflow_call:
+    secrets:
+      GH_DEPLOY_TOKEN:
+        required: true
+    inputs:
+      config_file:
+        type: string
+        required: true
+      manifest_file:
+        type: string
+        required: true
+    outputs:
+      release_created:
+        value: ${{ jobs.bump.outputs.release_created }}
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release_please.outputs.release_created }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+
+      - name: Run release please
+        id: release_please
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GH_DEPLOY_TOKEN }}
+          config-file: ${{ inputs.config_file }}
+          manifest-file: ${{ inputs.manifest_file }}
