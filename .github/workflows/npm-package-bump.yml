@@ -12,6 +12,9 @@ on:
       manifest_file:
         type: string
         required: true
+      target_branch:
+        type: string
+        required: true
     outputs:
       release_created:
         value: ${{ jobs.bump.outputs.release_created }}
@@ -49,3 +52,4 @@ jobs:
           token: ${{ secrets.GH_DEPLOY_TOKEN }}
           config-file: ${{ inputs.config_file }}
           manifest-file: ${{ inputs.manifest_file }}
+          target-branch: ${{ inputs.target_branch }}
