@@ -41,6 +41,7 @@ jobs:
 
       - name: Run post-Lint-specific scripts
         run: pnpm run --if-present "/^ci:pr:lint:post:.*/"
+
   check_commits:
     runs-on: ubuntu-latest
     steps:
@@ -67,5 +68,14 @@ jobs:
           node-version: "lts/*"
           cache: "pnpm"
 
-      - name: Run commitlint
-        run: commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run pre-Commitlint-specific scripts
+        run: pnpm run --if-present "/^ci:pr:commitlint:pre:.*/"
+
+      - name: Run Commitlint
+        run: pnpm run "/^ci:pr:commitlint:main:.*/" --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
+      - name: Run post-Commitlint-specific scripts
+        run: pnpm run --if-present "/^ci:pr:commitlint:post:.*/"
