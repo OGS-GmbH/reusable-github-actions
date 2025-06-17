@@ -1,6 +1,5 @@
 # Reuseable GitHub Actions
-
-![GitHub License](https://img.shields.io/github/license/OGS-GmbH/reusable-github-actions)
+![GitHub License](https://img.shields.io/github/license/OGS-GmbH/reusable-github-actions?color=0f434e)
 
 This repository contains a collection of reusable GitHub Actions designed to streamline and unify continuous integration and deployment workflows.
 
