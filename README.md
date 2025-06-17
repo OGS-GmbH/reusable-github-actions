@@ -9,7 +9,7 @@ Each action is built to be modular, composable, and easily integrable into vario
 - npm Packages
 
 ## License
-The MIT License (MIT) - Please have a look at the [LICENSE file](https://github.com/OGS-GmbH/reusable-github-actions/blob/main/LICENSE) for more details.
+The MIT License (MIT) - Please have a look at the [LICENSE file](./LICENSE) for more details.
 
 ## Contributing
 Contributions are always welcome and greatly appreciated. Whether you want to report a bug, suggest a new feature, or improve the documentation, your input helps make the project better for everyone.
