@@ -2,10 +2,17 @@ name: npm Package Pull Request Checks
 
 on:
   workflow_call:
+    secrets:
+      FONTAWESOME_REGISTRY_AUTH_TOKEN:
+        required: true
 
 jobs:
   check_lint:
     uses: ./.github/workflows/npm-package-pr-lint.yml
+    secrets:
+      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
 
   check_commits:
     uses: ./.github/workflows/npm-package-pr-commits.yml
+    secrets:
+      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}

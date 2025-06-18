@@ -2,6 +2,9 @@ name: npm Package Pull Request Lint Checks
 
 on:
   workflow_call:
+    secrets:
+      FONTAWESOME_REGISTRY_AUTH_TOKEN:
+        required: true
 
 jobs:
   check_lint:
@@ -29,6 +32,11 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           node-version: "lts/*"
           cache: "pnpm"
+
+      - name: Prepare Dependency Registries
+        run: |
+          echo "@fortawesome:registry = https://npm.fontawesome.com/" >> .npmrc
+          echo "//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}" >> .npmrc
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
