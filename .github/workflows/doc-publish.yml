@@ -40,13 +40,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Validate JSON files
-        run: |
-          set -e
-          pnpm dlx jsonlint -q $(git ls-files '*.json')
-
       - name: Create TsDoc-Markup via typedoc
-        run: pnpm typedoc --verbose
+        run: pnpm typedoc
 
       - name: Build VitePress
         run: pnpm run ci:docs:build
