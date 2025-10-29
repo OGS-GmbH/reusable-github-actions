@@ -42,9 +42,3 @@ jobs:
     secrets:
       NPM_ORG_OGS_GMBH_CI: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
-
- doc:
-   needs: publish
-   if: ${{ always() && needs.publish.result == 'success' }}
-			uses: ./.github/workflows/doc-publish.yml
-
