@@ -5,8 +5,8 @@ on:
 jobs:
   doc:
     runs-on: ubuntu-latest
-				permissions:
-     contents: write   
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,17 +30,16 @@ jobs:
           registry-url: "https://registry.npmjs.org"
           node-version: "lts/*"
           cache: "pnpm"
-										
-						- name: Install Dependencies
+
+      - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Create TsDoc-Markup via typedoc
         run: pnpm typedoc
 
       - name: Build VitePress
-        run:  pnpm run ci:docs:build
+        run: pnpm run ci:docs:build
 
-								
       - name: Publish to Github-Pages
         uses: actions/upload-pages-artifact@v3
         with:
