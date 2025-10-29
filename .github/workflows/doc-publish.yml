@@ -40,9 +40,6 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build dist-environment
-        run: pnpm run ci:build:main:production
-
       - name: Create TsDoc-Markup via typedoc
         run: pnpm typedoc
 
