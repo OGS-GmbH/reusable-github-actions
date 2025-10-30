@@ -36,6 +36,9 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        with:
+          enablement: true
+          token: ${{ secrets.GH_DEPLOY_TOKEN }}
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
