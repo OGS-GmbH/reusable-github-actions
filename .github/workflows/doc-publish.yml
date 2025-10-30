@@ -2,11 +2,15 @@ name: Deploy VitePress-Doc-Site to Pages
 
 on:
   workflow_call:
+    secrets:
+      GH_DEPLOY_TOKEN:
+        required: true
 
 permissions:
   contents: read
   pages: write
   id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,8 +41,8 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
         with:
-          enablement: true
           token: ${{ secrets.GH_DEPLOY_TOKEN }}
+          enablement: true
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
