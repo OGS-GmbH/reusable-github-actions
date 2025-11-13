@@ -5,10 +5,10 @@ on:
     secrets:
       NPM_ORG_OGS_GMBH_CI:
         required: true
-      FONTAWESOME_REGISTRY_AUTH_TOKEN:
-        required: false
       GH_DEPLOY_TOKEN:
         required: true
+      FONTAWESOME_REGISTRY_AUTH_TOKEN:
+        required: false
     inputs:
       config_file:
         type: string
