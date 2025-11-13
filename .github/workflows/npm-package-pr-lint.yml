@@ -50,7 +50,7 @@ jobs:
         run: pnpm run --if-present "/^ci:pr:lint:pre:.*/"
 
       - name: Run Lint
-        run: pnpm run "/^ci:pr:lint:main:.*/"
+        run: pnpm run --if-present "/^ci:pr:lint:main:.*/"
 
       - name: Run post-Lint-specific scripts
         run: pnpm run --if-present "/^ci:pr:lint:post:.*/"

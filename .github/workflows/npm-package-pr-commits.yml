@@ -50,7 +50,7 @@ jobs:
         run: pnpm run --if-present "/^ci:pr:commitlint:pre:.*/"
 
       - name: Run Commitlint
-        run: pnpm run "/^ci:pr:commitlint:main:.*/" -- --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+        run: pnpm run --if-present "/^ci:pr:commitlint:main:.*/" -- --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
 
       - name: Run post-Commitlint-specific scripts
         run: pnpm run --if-present "/^ci:pr:commitlint:post:.*/"
