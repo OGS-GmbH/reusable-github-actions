@@ -4,7 +4,7 @@ on:
   workflow_call:
     secrets:
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
-        required: true
+        required: false
 
 jobs:
   check_lint:
@@ -33,7 +33,10 @@ jobs:
           node-version: "lts/*"
           cache: "pnpm"
 
-      - name: Prepare Dependency Registries
+      - name: Prepare Font Awesome Registry
+        env:
+          FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+        if: ${{ env.FONTAWESOME_REGISTRY_AUTH_TOKEN != '' }}
         run: |
           echo "@fortawesome:registry = https://npm.fontawesome.com/" >> .npmrc
           echo "//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}" >> .npmrc
