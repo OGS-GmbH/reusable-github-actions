@@ -6,6 +6,17 @@ on:
       NPM_ORG_OGS_GMBH_CI:
         required: true
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
+        required: false
+        GH_DEPLOY_TOKEN:
+    inputs:
+      config_file:
+        type: string
+        required: true
+      manifest_file:
+        type: string
+        required: true
+      target_branch:
+        type: string
         required: true
 
 permissions:
@@ -44,7 +55,10 @@ jobs:
           node-version: "lts/*"
           cache: "pnpm"
 
-      - name: Prepare Dependency Registries
+      - name: Prepare Font Awesome Registry
+        env:
+          FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+        if: ${{ env.FONTAWESOME_REGISTRY_AUTH_TOKEN != "" }}
         run: |
           echo "@fortawesome:registry = https://npm.fontawesome.com/" >> .npmrc
           echo "//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}" >> .npmrc
@@ -63,3 +77,13 @@ jobs:
 
       - name: Run Publish
         run: pnpm publish --no-git-checks --access public
+
+      - name: Run release please
+        id: release_please
+        uses: googleapis/release-please-action@v4
+        with:
+          skip-github-pull-request: true
+          token: ${{ secrets.GH_DEPLOY_TOKEN }}
+          config-file: ${{ inputs.config_file }}
+          manifest-file: ${{ inputs.manifest_file }}
+          target-branch: ${{ inputs.target_branch }}

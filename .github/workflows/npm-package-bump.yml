@@ -42,6 +42,7 @@ jobs:
         id: release_please
         uses: googleapis/release-please-action@v4
         with:
+          skip-github-release: true
           token: ${{ secrets.GH_DEPLOY_TOKEN }}
           config-file: ${{ inputs.config_file }}
           manifest-file: ${{ inputs.manifest_file }}

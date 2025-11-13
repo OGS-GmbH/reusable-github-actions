@@ -8,7 +8,7 @@ on:
       NPM_ORG_OGS_GMBH_CI:
         required: true
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
-        required: true
+        required: false
     inputs:
       release_please_config_file:
         type: string
@@ -42,3 +42,7 @@ jobs:
     secrets:
       NPM_ORG_OGS_GMBH_CI: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+    with:
+      config_file: ${{ inputs.release_please_config_file }}
+      manifest_file: ${{ inputs.release_please_manifest_file }}
+      target_branch: ${{ inputs.release_please_target_branch }}
