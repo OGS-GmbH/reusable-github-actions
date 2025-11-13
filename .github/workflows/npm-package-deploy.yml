@@ -41,8 +41,8 @@ jobs:
     uses: ./.github/workflows/npm-package-publish.yml
     secrets:
       NPM_ORG_OGS_GMBH_CI: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
-      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
     with:
       config_file: ${{ inputs.release_please_config_file }}
       manifest_file: ${{ inputs.release_please_manifest_file }}
