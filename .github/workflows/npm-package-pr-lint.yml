@@ -4,7 +4,7 @@ on:
   workflow_call:
     secrets:
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
-        required: true
+        required: false
 
 jobs:
   check_lint:
@@ -27,25 +27,30 @@ jobs:
           fi
 
       - name: Setup Node.js
+        if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
         uses: actions/setup-node@v4
         with:
           registry-url: "https://registry.npmjs.org"
           node-version: "lts/*"
           cache: "pnpm"
 
-      - name: Prepare Dependency Registries
+      - name: Prepare Font Awesome Registry
+        env:
+          FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+        if: ${{ env.FONTAWESOME_REGISTRY_AUTH_TOKEN != '' && hashFiles('pnpm-lock.yaml') != '' }}
         run: |
           echo "@fortawesome:registry = https://npm.fontawesome.com/" >> .npmrc
           echo "//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}" >> .npmrc
 
       - name: Install Dependencies
+        if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
         run: pnpm install --frozen-lockfile
 
       - name: Run pre-Lint-specific scripts
         run: pnpm run --if-present "/^ci:pr:lint:pre:.*/"
 
       - name: Run Lint
-        run: pnpm run "/^ci:pr:lint:main:.*/"
+        run: pnpm run --if-present "/^ci:pr:lint:main:.*/"
 
       - name: Run post-Lint-specific scripts
         run: pnpm run --if-present "/^ci:pr:lint:post:.*/"

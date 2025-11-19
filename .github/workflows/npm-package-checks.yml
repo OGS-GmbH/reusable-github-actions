@@ -1,27 +1,14 @@
-name: npm Package Publish
+name: npm Package Checks
 
 on:
   workflow_call:
     secrets:
-      NPM_ORG_OGS_GMBH_CI:
-        required: true
-      GH_DEPLOY_TOKEN:
-        required: true
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
         required: false
-
-permissions:
-  id-token: write
-  contents: write
-  pull-requests: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
-      NPM_CONFIG_PROVENANCE: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -74,6 +61,3 @@ jobs:
 
       - name: Run post-Build-specific scripts
         run: pnpm run --if-present "/^ci:build:post:.*/"
-
-      - name: Run Publish
-        run: pnpm publish --no-git-checks --access public
