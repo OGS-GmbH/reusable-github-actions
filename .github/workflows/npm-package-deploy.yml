@@ -52,13 +52,24 @@ jobs:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
 
-  ms-teams:
+  ms-teams-success:
     needs: publish
-    if: ${{ always() }}
+    if: ${{ success() }}
     uses: ./.github/workflows/ms-teams-notify.yml
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
       MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
     with:
-      title: success() && "Deployment successful" || "Deployment failed"
-      status: success() && "success" || "failure"
+      title: "Deployment successful"
+      status: "success"
+
+  ms-teams-failure:
+    needs: publish
+    if: ${{ failure() }}
+    uses: ./.github/workflows/ms-teams-notify.yml
+    secrets:
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+      MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
+    with:
+      title: "Deployment failed"
+      status: "failure"
