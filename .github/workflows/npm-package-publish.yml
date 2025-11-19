@@ -16,7 +16,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
     env:
       NPM_TOKEN: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
@@ -77,8 +77,3 @@ jobs:
 
       - name: Run Publish
         run: pnpm publish --no-git-checks --access public
-
-      - name: Notify MS-Teams
-        uses: mikesprague/teams-incoming-webhook-action@v1
-        with:
-          github-token: ${{ github.token }}
