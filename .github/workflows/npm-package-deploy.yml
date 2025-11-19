@@ -57,7 +57,7 @@ jobs:
     uses: ./.github/workflows/ms-teams-notify.yml
     env:
       MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
-    if: always() && env.MS_TEAMS_URL != ''
+    if: ${{ always() && env.MS_TEAMS_URL != '' }}
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
       MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
