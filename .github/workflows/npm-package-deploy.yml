@@ -26,8 +26,16 @@ permissions:
   pull-requests: write
 
 jobs:
+  checks:
+    uses: ./.github/workflows/npm-package-checks.yml
+    secrets:
+      NPM_ORG_OGS_GMBH_CI: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+
   bump:
     uses: ./.github/workflows/npm-package-bump.yml
+    needs: checks
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
     with:
@@ -43,7 +51,3 @@ jobs:
       NPM_ORG_OGS_GMBH_CI: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
-    with:
-      config_file: ${{ inputs.release_please_config_file }}
-      manifest_file: ${{ inputs.release_please_manifest_file }}
-      target_branch: ${{ inputs.release_please_target_branch }}

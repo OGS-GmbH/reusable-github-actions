@@ -38,8 +38,6 @@ jobs:
         uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.GH_DEPLOY_TOKEN }}
-          skip-github-pull-request: false
-          skip-github-release: true
           config-file: ${{ inputs.config_file }}
           manifest-file: ${{ inputs.manifest_file }}
           target-branch: ${{ inputs.target_branch }}
