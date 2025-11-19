@@ -1,0 +1,29 @@
+name: MS-Teams notify
+
+on:
+  workflow_call:
+    secrets:
+      GH_DEPLOY_TOKEN:
+        required: true
+      MS_TEAMS_URL:
+        required: true
+    inputs:
+      title:
+        type: string
+        required: true
+      status:
+        type: string
+        required: true
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send webhook
+        uses: mikesprague/teams-incoming-webhook-action@v1
+        with:
+          github-token: ${{ secrets.GH_DEPLOY_TOKEN }}
+          webhook-url: ${{ secrets.MS_TEAMS_URL }}
+          deploy-card: true
+          title: ${{ inputs.title }}
+          color: ${{ inputs.status }}
