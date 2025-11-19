@@ -55,12 +55,10 @@ jobs:
   ms-teams:
     needs: publish
     uses: ./.github/workflows/ms-teams-notify.yml
-    env:
-      MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
-    if: ${{ always() && env.MS_TEAMS_URL != '' }}
+    if: ${{ always() && secrets.MS_TEAMS_URL != '' }}
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
       MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
     with:
-      title: ${{ success() && "Deployment successful" || "Deployment failed" }}
-      color: ${{ success() && "success" || "failure" }}
+      title: ${{ success() ? "Deployment successful" : "Deployment failed" }}
+      color: ${{ success() ? "success" : "failure" }}
