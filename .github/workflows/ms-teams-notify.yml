@@ -25,5 +25,6 @@ jobs:
           github-token: ${{ secrets.GH_DEPLOY_TOKEN }}
           webhook-url: ${{ secrets.MS_TEAMS_URL }}
           deploy-card: true
+          timezone: "Europe/Berlin"
           title: ${{ inputs.title }}
           color: ${{ inputs.status }}

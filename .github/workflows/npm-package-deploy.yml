@@ -3,6 +3,8 @@ name: npm Package Deploy
 on:
   workflow_call:
     secrets:
+      MS_TEAMS_URL:
+        required: false
       GH_DEPLOY_TOKEN:
         required: true
       NPM_ORG_OGS_GMBH_CI:
@@ -49,3 +51,16 @@ jobs:
       NPM_ORG_OGS_GMBH_CI: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+
+  ms-teams:
+    needs: publish
+    uses: ./.github/workflows/ms-teams-notify.yml
+    env:
+      MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
+    if: always() && env.MS_TEAMS_URL != ''
+    secrets:
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+      MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
+    with:
+      title: ${{ success() && "Deployment successful" || "Deployment failed" }}
+      color: ${{ success() && "success" || "failure" }}
