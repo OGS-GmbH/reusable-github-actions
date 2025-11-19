@@ -62,7 +62,7 @@ jobs:
         run: pnpm run --if-present "/^ci:build:pre:.*/"
 
       - name: Run Build
-        run: pnpm run "/^ci:build:main:.*/"
+        run: pnpm run --if-present "/^ci:build:main:.*/"
 
       - name: Run post-Build-specific scripts
         run: pnpm run --if-present "/^ci:build:post:.*/"
