@@ -6,7 +6,7 @@ on:
       GH_DEPLOY_TOKEN:
         required: true
       MS_TEAMS_URL:
-        required: true
+        required: false
     inputs:
       title:
         type: string
@@ -20,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send webhook
+        env:
+          MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
+        if: ${{ env.MS_TEAMS_URL != '' }}
         uses: mikesprague/teams-incoming-webhook-action@v1
         with:
           github-token: ${{ secrets.GH_DEPLOY_TOKEN }}

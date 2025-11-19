@@ -54,7 +54,7 @@ jobs:
 
   ms-teams:
     needs: publish
-    if: ${{ always() && secrets.MS_TEAMS_URL != '' }}
+    if: ${{ always() }}
     uses: ./.github/workflows/ms-teams-notify.yml
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
