@@ -34,6 +34,13 @@ jobs:
           node-version: "lts/*"
           cache: "pnpm"
 
+      - name: Setup Node.js
+        if: ${{ hashFiles('pnpm-lock.yaml') == '' }}
+        uses: actions/setup-node@v4
+        with:
+          registry-url: "https://registry.npmjs.org"
+          node-version: "lts/*"
+
       - name: Prepare Font Awesome Registry
         env:
           FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
