@@ -16,7 +16,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
     env:
       NPM_TOKEN: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
