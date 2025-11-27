@@ -12,7 +12,7 @@ on:
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
         required: false
     inputs:
-      docs_enabled:
+      skip_docs:
         type: boolean
         required: false
       release_please_config_file:
@@ -57,7 +57,7 @@ jobs:
 
   docs:
     needs: publish
-    if: ${{ inputs.docs_enabled }}
+    if: ${{ inputs.skip_docs }}
     uses: ./.github/workflows/npm-package-docs.yml
     secrets:
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
