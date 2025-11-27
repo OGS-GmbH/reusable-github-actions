@@ -1,25 +1,21 @@
-name: npm Package Publish
+name: Deploy Docs to GitHub Pages
 
 on:
   workflow_call:
     secrets:
-      NPM_ORG_OGS_GMBH_CI:
-        required: true
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
         required: false
+      GH_DEPLOY_TOKEN:
+        required: true
 
 permissions:
+  contents: read
+  pages: write
   id-token: write
-  contents: write
-  pull-requests: write
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
-      NPM_CONFIG_PROVENANCE: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -64,14 +60,37 @@ jobs:
         if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
         run: pnpm install --frozen-lockfile
 
-      - name: Run pre-Build-specific scripts
-        run: pnpm run --if-present "/^ci:build:pre:.*/"
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Run Build
-        run: pnpm run --if-present "/^ci:build:main:.*/"
+      - name: Extract
+        run: pnpm run --if-present "/^ci:docs:extract:.*/"
 
-      - name: Run post-Build-specific scripts
-        run: pnpm run --if-present "/^ci:build:post:.*/"
+      - name: Build
+        run: pnpm run --if-present "/^ci:docs:main:.*/"
 
-      - name: Run Publish
-        run: pnpm publish --no-git-checks --access public
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          token: ${{ secrets.GH_DEPLOY_TOKEN }}
+          enablement: ${{ secrets.GH_DEPLOY_TOKEN }}
+
+      - name: Upload GitHub Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        id: artifact-upload
+        with:
+          path: ./dist/docs
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - name: Deploy to Github Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.GH_DEPLOY_TOKEN }}
