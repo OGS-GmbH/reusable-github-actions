@@ -70,7 +70,7 @@ jobs:
         run: pnpm run --if-present "/^ci:docs:build:.*/"
 
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
         with:
           token: ${{ secrets.GH_DEPLOY_TOKEN }}
           enablement: true
@@ -92,3 +92,5 @@ jobs:
       - name: Deploy to Github Pages
         id: deploy
         uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.GH_DEPLOY_TOKEN }}
