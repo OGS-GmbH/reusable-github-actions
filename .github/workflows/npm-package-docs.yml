@@ -69,12 +69,6 @@ jobs:
       - name: Build
         run: pnpm run --if-present "/^ci:docs:build:.*/"
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-        with:
-          token: ${{ secrets.GH_DEPLOY_TOKEN }}
-          enablement: true
-
       - name: Upload GitHub Pages Artifact
         uses: actions/upload-pages-artifact@v3
         id: artifact-upload

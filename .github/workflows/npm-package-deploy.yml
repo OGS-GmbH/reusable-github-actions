@@ -53,7 +53,6 @@ jobs:
     uses: ./.github/workflows/npm-package-publish.yml
     secrets:
       NPM_ORG_OGS_GMBH_CI: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
-      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
 
   docs:
