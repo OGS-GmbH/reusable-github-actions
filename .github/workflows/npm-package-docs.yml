@@ -67,7 +67,7 @@ jobs:
         run: pnpm run --if-present "/^ci:docs:extract:.*/"
 
       - name: Build
-        run: pnpm run --if-present "/^ci:docs:build:.*/"
+        run: pnpm run --if-present "/^ci:docs:main:.*/"
 
       - name: Upload GitHub Pages Artifact
         uses: actions/upload-pages-artifact@v3
