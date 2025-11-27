@@ -57,7 +57,7 @@ jobs:
 
   docs:
     needs: publish
-    if: ${{ inputs.skip_docs }}
+    if: ${{ !inputs.skip_docs }}
     uses: ./.github/workflows/npm-package-docs.yml
     secrets:
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
