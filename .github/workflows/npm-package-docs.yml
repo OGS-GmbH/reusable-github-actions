@@ -1,0 +1,88 @@
+name: Deploy Docs to GitHub Pages
+
+on:
+  workflow_call:
+    secrets:
+      FONTAWESOME_REGISTRY_AUTH_TOKEN:
+        required: false
+      GH_DEPLOY_TOKEN:
+        required: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup pnpm cache dir
+        run: |
+          PNPM_STORE_PATH="$( pnpm store path --silent )"
+          if [ ! -d "$PNPM_STORE_PATH" ]; then
+            mkdir -p "$PNPM_STORE_PATH"
+          fi
+
+      - name: Setup Node.js
+        if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
+        uses: actions/setup-node@v4
+        with:
+          registry-url: "https://registry.npmjs.org"
+          node-version: "lts/*"
+          cache: "pnpm"
+      
+      - name: Setup Node.js
+        if: ${{ hashFiles('pnpm-lock.yaml') == '' }}
+        uses: actions/setup-node@v4
+        with:
+          registry-url: "https://registry.npmjs.org"
+          node-version: "lts/*"
+
+      - name: Prepare Font Awesome Registry
+        env:
+          FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+        if: ${{ env.FONTAWESOME_REGISTRY_AUTH_TOKEN != '' && hashFiles('pnpm-lock.yaml') != '' }}
+        run: |
+          echo "@fortawesome:registry = https://npm.fontawesome.com/" >> .npmrc
+          echo "//npm.fontawesome.com/:_authToken=${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}" >> .npmrc
+
+      - name: Install Dependencies
+        if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Extract
+        run: pnpm run --if-present "/^ci:docs:extract:.*/"
+
+      - name: Build
+        run: pnpm run --if-present "/^ci:docs:build:.*/"
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+        with:
+          token: ${{ secrets.GH_DEPLOY_TOKEN }}
+          enablement: true
+
+      - name: Upload GitHub Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        id: artifact-upload
+        with:
+          path: ./dist/docs
+
+      - name: Deploy to GitHub Pages
+        environment:
+          name: github-pages
+          url: ${{ steps.artifact-upload.outputs.page_url }}
+        uses: actions/deploy-pages@v4

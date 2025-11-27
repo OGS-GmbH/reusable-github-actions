@@ -12,6 +12,9 @@ on:
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
         required: false
     inputs:
+      docs_enabled:
+        type: boolean
+        required: false
       release_please_config_file:
         type: string
         required: true
@@ -52,8 +55,16 @@ jobs:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
 
-  ms-teams-success:
+  docs:
     needs: publish
+    if: ${{ inputs.docs_enabled }}
+    uses: ./.github/workflows/npm-package-docs.yml
+    secrets:
+      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+
+  ms-teams-success:
+    needs: docs
     if: ${{ success() }}
     uses: ./.github/workflows/ms-teams-notify.yml
     secrets:
@@ -64,7 +75,7 @@ jobs:
       status: "success"
 
   ms-teams-failure:
-    needs: publish
+    needs: docs
     if: ${{ failure() }}
     uses: ./.github/workflows/ms-teams-notify.yml
     secrets:
