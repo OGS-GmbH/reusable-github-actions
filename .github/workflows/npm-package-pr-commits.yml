@@ -4,7 +4,7 @@ on:
   workflow_call:
     secrets:
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
-        required: true
+        required: false
 
 jobs:
   check_commits:
