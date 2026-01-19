@@ -64,7 +64,7 @@ jobs:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
 
   ms-teams-success:
-    needs: docs
+    needs: [docs, publish]
     if: ${{ success() }}
     uses: ./.github/workflows/ms-teams-notify.yml
     secrets:
@@ -75,7 +75,7 @@ jobs:
       status: "success"
 
   ms-teams-failure:
-    needs: docs
+    needs: [docs, publish]
     if: ${{ failure() }}
     uses: ./.github/workflows/ms-teams-notify.yml
     secrets:
