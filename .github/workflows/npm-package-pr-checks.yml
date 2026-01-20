@@ -1,4 +1,4 @@
-name: npm Package Pull Request Checks
+name: npm package PR checks
 
 on:
   workflow_call:

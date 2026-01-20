@@ -1,4 +1,4 @@
-name: npm package docs
+name: npm package docs checks
 
 on:
   workflow_call:
@@ -7,11 +7,6 @@ on:
         required: false
       GH_DEPLOY_TOKEN:
         required: true
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 
 jobs:
   build:
@@ -74,22 +69,3 @@ jobs:
         with:
           token: ${{ secrets.GH_DEPLOY_TOKEN }}
           enablement: true
-
-      - name: Upload GitHub Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        id: artifact-upload
-        with:
-          path: ./dist/docs
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to Github Pages
-        id: deploy
-        uses: actions/deploy-pages@v4
-        with:
-          token: ${{ secrets.GH_DEPLOY_TOKEN }}

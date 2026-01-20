@@ -1,4 +1,4 @@
-name: npm Package Bump
+name: npm package bump
 
 on:
   workflow_call:

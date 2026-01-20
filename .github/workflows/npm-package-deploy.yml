@@ -1,4 +1,4 @@
-name: npm Package Deploy
+name: npm package deploy
 
 on:
   workflow_call:
@@ -12,9 +12,6 @@ on:
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
         required: false
     inputs:
-      skip_docs:
-        type: boolean
-        required: false
       release_please_config_file:
         type: string
         required: true
@@ -37,9 +34,21 @@ jobs:
     secrets:
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
 
+  docs-detect:
+    uses: ./.github/workflows/npm-package-docs-detect.yml
+
+  docs-checks:
+    uses: ./.github/workflows/npm-package-docs-checks.yml
+    needs: [docs-detect]
+    if: ${{ needs.docs-detect.outputs.detected == 'true' }}
+    secrets:
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+
   bump:
     uses: ./.github/workflows/npm-package-bump.yml
-    needs: checks
+    needs: [checks, docs-checks]
+    if: ${{ always() && needs.checks.result == 'success' && needs.docs-checks != 'failure' }}
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
     with:
@@ -56,8 +65,8 @@ jobs:
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
 
   docs:
-    needs: publish
-    if: ${{ !inputs.skip_docs }}
+    needs: [docs-detect, docs-checks, publish]
+    if: ${{ needs.docs-detect.outputs.detected == 'true' }}
     uses: ./.github/workflows/npm-package-docs.yml
     secrets:
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}

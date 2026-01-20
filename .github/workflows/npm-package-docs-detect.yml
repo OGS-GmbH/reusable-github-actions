@@ -1,0 +1,31 @@
+name: npm package docs detect
+
+on:
+  workflow_call:
+    outputs:
+      detected:
+        description: "true, if docs could be detected"
+        value: ${{ jobs.detect.outputs.detected }}
+
+jobs:
+  detect:
+    outputs:
+      detected: ${{ steps.detect.outputs.detected }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect
+        id: detect
+        shell: bash
+        run: |
+          DETECTED=false
+          DIR=".vitepress"
+
+          if [ -d "$DIR" ]; then
+            DETECTED=true
+          fi
+
+          echo "$DETECTED"
+          echo "detected=$DETECTED" >> "$GITHUB_OUTPUT"

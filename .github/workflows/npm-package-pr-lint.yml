@@ -1,4 +1,4 @@
-name: npm Package Pull Request Lint Checks
+name: npm package PR lint
 
 on:
   workflow_call:

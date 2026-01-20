@@ -1,4 +1,4 @@
-name: npm Package Checks
+name: npm package checks
 
 on:
   workflow_call:

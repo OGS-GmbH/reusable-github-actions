@@ -1,4 +1,4 @@
-name: npm Package Pull Request Commit Checks
+name: npm package PR commit
 
 on:
   workflow_call:
