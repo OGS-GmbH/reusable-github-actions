@@ -20,7 +20,6 @@ on:
         value: ${{ jobs.bump.outputs.release_created }}
 
 permissions:
-  id-token: write
   contents: write
   pull-requests: write
 
