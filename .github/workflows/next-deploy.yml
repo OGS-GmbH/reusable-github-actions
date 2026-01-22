@@ -21,7 +21,7 @@ jobs:
 
   ms-teams-success:
     needs: [bump]
-    if: ${{ success() }}
+    if: ${{ success() && needs.bump.outputs.release_created }}
     uses: ./.github/workflows/ci-ms-teams-notify.yml
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
