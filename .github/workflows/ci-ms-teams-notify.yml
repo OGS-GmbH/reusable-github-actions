@@ -1,4 +1,4 @@
-name: MS-Teams notify
+name: ci MS-Teams notify
 
 on:
   workflow_call:
