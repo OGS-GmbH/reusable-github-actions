@@ -15,9 +15,9 @@ jobs:
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
     with:
-      release_please_config_file: ".release-please/main-config.json"
-      release_please_manifest_file: ".release-please/main-manifest.json"
-      release_please_target_branch: "main"
+      config_file: ".release-please/main-config.json"
+      manifest_file: ".release-please/main-manifest.json"
+      target_branch: "main"
 
   ms-teams-success:
     needs: [bump]
