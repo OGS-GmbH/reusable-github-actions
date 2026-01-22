@@ -46,7 +46,7 @@ jobs:
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
 
   bump:
-    uses: ./.github/workflows/npm-package-bump.yml
+    uses: ./.github/workflows/ci-bump.yml
     needs: [checks, docs-checks]
     if: ${{ always() && needs.checks.result == 'success' && needs.docs-checks != 'failure' }}
     secrets:
@@ -64,18 +64,18 @@ jobs:
       NPM_ORG_OGS_GMBH_CI: ${{ secrets.NPM_ORG_OGS_GMBH_CI }}
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
 
-  docs:
+  docs-publish:
     needs: [docs-detect, docs-checks, publish]
     if: ${{ needs.docs-detect.outputs.detected == 'true' }}
-    uses: ./.github/workflows/npm-package-docs.yml
+    uses: ./.github/workflows/npm-package-docs-publish.yml
     secrets:
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
 
   ms-teams-success:
-    needs: [docs, publish]
+    needs: [docs-publish, publish]
     if: ${{ success() }}
-    uses: ./.github/workflows/ms-teams-notify.yml
+    uses: ./.github/workflows/ci-ms-teams-notify.yml
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
       MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
@@ -84,9 +84,9 @@ jobs:
       status: "success"
 
   ms-teams-failure:
-    needs: [docs, publish]
+    needs: [docs-publish, publish]
     if: ${{ failure() }}
-    uses: ./.github/workflows/ms-teams-notify.yml
+    uses: ./.github/workflows/ci-ms-teams-notify.yml
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
       MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}

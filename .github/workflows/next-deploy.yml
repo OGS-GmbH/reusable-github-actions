@@ -1,0 +1,42 @@
+name: next deploy
+on:
+  push:
+    branches:
+      - "next"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    uses: ./.github/workflows/ci-bump.yml
+    secrets:
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+    with:
+      release_please_config_file: ".release-please/next-config.json"
+      release_please_manifest_file: ".release-please/next-manifest.json"
+      release_please_target_branch: "next"
+
+  ms-teams-success:
+    needs: [bump]
+    if: ${{ success() }}
+    uses: ./.github/workflows/ci-ms-teams-notify.yml
+    secrets:
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+      MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
+    with:
+      title: "Deployment successful"
+      status: "success"
+
+  ms-teams-failure:
+    needs: [bump]
+    if: ${{ failure() }}
+    uses: ./.github/workflows/ci-ms-teams-notify.yml
+    secrets:
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+      MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
+    with:
+      title: "Deployment failed"
+      status: "failure"
