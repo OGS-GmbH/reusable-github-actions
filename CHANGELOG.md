@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.0.0...v1.0.1) (2026-01-23)
+
+
+### Bug Fixes
+
+* **npm-deploy:** ms-teams notify only on publish status changes ([57f23dc](https://github.com/OGS-GmbH/reusable-github-actions/commit/57f23dc50ec6cefeed90321a1ab14f0c8e9f3ff8))
+
 ## 1.0.0 (2026-01-22)
 
 
