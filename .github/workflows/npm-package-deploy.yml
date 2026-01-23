@@ -74,7 +74,7 @@ jobs:
 
   ms-teams-success:
     needs: [docs-publish, publish]
-    if: ${{ success() }}
+    if: ${{ always() && needs.docs-publish.result != 'failure' && needs.publish.result == 'success' }}
     uses: ./.github/workflows/ci-ms-teams-notify.yml
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
@@ -85,7 +85,7 @@ jobs:
 
   ms-teams-failure:
     needs: [docs-publish, publish]
-    if: ${{ failure() }}
+    if: ${{ always() && (needs.docs-publish.result == 'failure' || needs.docs-publish.result == 'failure') }}
     uses: ./.github/workflows/ci-ms-teams-notify.yml
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
