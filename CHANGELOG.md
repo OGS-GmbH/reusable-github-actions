@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.0.1...v1.0.2) (2026-01-27)
+
+
+### Bug Fixes
+
+* **deploy:** publish always on release creation ([1e2e7c7](https://github.com/OGS-GmbH/reusable-github-actions/commit/1e2e7c7b293e242d8ed5a60b203c6529ebce86c3))
+
 ## [1.0.1](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.0.0...v1.0.1) (2026-01-23)
 
 
