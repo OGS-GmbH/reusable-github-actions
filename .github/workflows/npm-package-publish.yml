@@ -4,7 +4,7 @@ on:
   workflow_call:
     secrets:
       NPM_ORG_OGS_GMBH_CI:
-        required: true
+        required: false
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
         required: false
 
