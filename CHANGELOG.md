@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.0.2...v1.1.0) (2026-02-16)
+
+
+### Features
+
+* **npm:** add trusted deployment ([e0b8c21](https://github.com/OGS-GmbH/reusable-github-actions/commit/e0b8c210e15ccb64e1a49a100b59e302f12c86cd))
+
 ## [1.0.2](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.0.1...v1.0.2) (2026-01-27)
 
 
