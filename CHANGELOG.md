@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.1.0...v1.1.1) (2026-02-16)
+
+
+### Bug Fixes
+
+* **npm:** add id-token permission for trusted publishing ([84b6cc5](https://github.com/OGS-GmbH/reusable-github-actions/commit/84b6cc5904104104fb3ab9e5e2d053a6e29faa15))
+
 ## [1.1.0](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.0.2...v1.1.0) (2026-02-16)
 
 
