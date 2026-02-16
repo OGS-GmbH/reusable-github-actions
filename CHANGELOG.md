@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.1.1...v1.1.2) (2026-02-16)
+
+
+### Bug Fixes
+
+* **npm:** mark npm token as optional ([7e83918](https://github.com/OGS-GmbH/reusable-github-actions/commit/7e83918d6911391e211a78b00de80ae9a7556fa6))
+
 ## [1.1.1](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.1.0...v1.1.1) (2026-02-16)
 
 
