@@ -1,0 +1,92 @@
+name: npm package trusted deploy
+
+on:
+  workflow_call:
+    secrets:
+      MS_TEAMS_URL:
+        required: false
+      GH_DEPLOY_TOKEN:
+        required: true
+      FONTAWESOME_REGISTRY_AUTH_TOKEN:
+        required: false
+    inputs:
+      release_please_config_file:
+        type: string
+        required: true
+      release_please_manifest_file:
+        type: string
+        required: true
+      release_please_target_branch:
+        type: string
+        required: true
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+  pages: write
+
+jobs:
+  checks:
+    uses: ./.github/workflows/npm-package-checks.yml
+    secrets:
+      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+
+  docs-detect:
+    uses: ./.github/workflows/npm-package-docs-detect.yml
+
+  docs-checks:
+    uses: ./.github/workflows/npm-package-docs-checks.yml
+    needs: [docs-detect]
+    if: ${{ needs.docs-detect.outputs.detected == 'true' }}
+    secrets:
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+
+  bump:
+    uses: ./.github/workflows/ci-bump.yml
+    needs: [checks, docs-checks]
+    if: ${{ always() && needs.checks.result == 'success' && needs.docs-checks != 'failure' }}
+    secrets:
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+    with:
+      config_file: ${{ inputs.release_please_config_file }}
+      manifest_file: ${{ inputs.release_please_manifest_file }}
+      target_branch: ${{ inputs.release_please_target_branch }}
+
+  publish:
+    needs: bump
+    if: ${{ always() && needs.bump.outputs.release_created }}
+    uses: ./.github/workflows/npm-package-publish.yml
+    secrets:
+      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+
+  docs-publish:
+    needs: [docs-detect, docs-checks, publish]
+    if: ${{ needs.docs-detect.outputs.detected == 'true' }}
+    uses: ./.github/workflows/npm-package-docs-publish.yml
+    secrets:
+      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+
+  ms-teams-success:
+    needs: [docs-publish, publish]
+    if: ${{ always() && needs.docs-publish.result != 'failure' && needs.publish.result == 'success' }}
+    uses: ./.github/workflows/ci-ms-teams-notify.yml
+    secrets:
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+      MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
+    with:
+      title: "Deployment successful"
+      status: "success"
+
+  ms-teams-failure:
+    needs: [docs-publish, publish]
+    if: ${{ always() && (needs.docs-publish.result == 'failure' || needs.docs-publish.result == 'failure') }}
+    uses: ./.github/workflows/ci-ms-teams-notify.yml
+    secrets:
+      GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
+      MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
+    with:
+      title: "Deployment failed"
+      status: "failure"
