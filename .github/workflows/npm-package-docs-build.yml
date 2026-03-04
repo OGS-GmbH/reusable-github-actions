@@ -1,13 +1,15 @@
-name: npm package checks
+name: npm package docs build 
 
 on:
   workflow_call:
     secrets:
       FONTAWESOME_REGISTRY_AUTH_TOKEN:
         required: false
+      GH_DEPLOY_TOKEN:
+        required: true
 
 jobs:
-  checks:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,11 +55,17 @@ jobs:
         if: ${{ hashFiles('pnpm-lock.yaml') != '' }}
         run: pnpm install --frozen-lockfile
 
-      - name: Run pre-Build-specific scripts
-        run: pnpm run --if-present "/^ci:build:pre:.*/"
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Run Build
-        run: pnpm run --if-present "/^ci:build:main:.*/"
+      - name: Extract
+        run: pnpm run --if-present "/^ci:docs:extract:.*/"
 
-      - name: Run post-Build-specific scripts
-        run: pnpm run --if-present "/^ci:build:post:.*/"
+      - name: Build
+        run: pnpm run --if-present "/^ci:docs:main:.*/"
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          token: ${{ secrets.GH_DEPLOY_TOKEN }}
+          enablement: true

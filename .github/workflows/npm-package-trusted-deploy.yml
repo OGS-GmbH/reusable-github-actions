@@ -27,16 +27,22 @@ permissions:
   pages: write
 
 jobs:
-  checks:
-    uses: ./.github/workflows/npm-package-checks.yml
+  test:
+    uses: ./.github/workflows/npm-package-test.yml
+    secrets:
+      FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
+
+  build:
+    uses: ./.github/workflows/npm-package-build.yml
+    needs: [test]
     secrets:
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
 
   docs-detect:
     uses: ./.github/workflows/npm-package-docs-detect.yml
 
-  docs-checks:
-    uses: ./.github/workflows/npm-package-docs-checks.yml
+  docs-build:
+    uses: ./.github/workflows/npm-package-docs-build.yml
     needs: [docs-detect]
     if: ${{ needs.docs-detect.outputs.detected == 'true' }}
     secrets:
@@ -45,8 +51,8 @@ jobs:
 
   bump:
     uses: ./.github/workflows/ci-bump.yml
-    needs: [checks, docs-checks]
-    if: ${{ always() && needs.checks.result == 'success' && needs.docs-checks != 'failure' }}
+    needs: [build, docs-build]
+    if: ${{ always() && needs.build.result == 'success' && needs.docs-build != 'failure' }}
     secrets:
       GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
     with:
@@ -62,7 +68,7 @@ jobs:
       FONTAWESOME_REGISTRY_AUTH_TOKEN: ${{ secrets.FONTAWESOME_REGISTRY_AUTH_TOKEN }}
 
   docs-publish:
-    needs: [docs-detect, docs-checks, publish]
+    needs: [docs-detect, docs-build, publish]
     if: ${{ needs.docs-detect.outputs.detected == 'true' }}
     uses: ./.github/workflows/npm-package-docs-publish.yml
     secrets:
