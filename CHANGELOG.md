@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.1.2...v1.2.0) (2026-03-04)
+
+
+### Features
+
+* add test job ([6b12e51](https://github.com/OGS-GmbH/reusable-github-actions/commit/6b12e51db78982067b18b190edf9569b2c69b55e))
+
 ## [1.1.2](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.1.1...v1.1.2) (2026-02-16)
 
 
