@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.2.0...v1.2.1) (2026-03-23)
+
+
+### Bug Fixes
+
+* **npm-package-deploy:** change docs-build ref ([d46e022](https://github.com/OGS-GmbH/reusable-github-actions/commit/d46e0223628e649006d3bb7d90faab4cfe228343))
+
 ## [1.2.0](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.1.2...v1.2.0) (2026-03-04)
 
 
