@@ -44,7 +44,7 @@ jobs:
     uses: ./.github/workflows/npm-package-docs-detect.yml
 
   docs-build:
-    uses: ./.github/workflows/npm-package-docs-checks.yml
+    uses: ./.github/workflows/npm-package-docs-build.yml
     needs: [docs-detect]
     if: ${{ needs.docs-detect.outputs.detected == 'true' }}
     secrets:
