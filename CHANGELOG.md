@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.2.1...v2.0.0) (2026-04-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrade actions to use node 24
+
+### Miscellaneous Chores
+
+* upgrade actions to use node 24 ([0b4083a](https://github.com/OGS-GmbH/reusable-github-actions/commit/0b4083a3cb4872d2fdd90780618a34ee9902e437))
+
 ## [1.2.1](https://github.com/OGS-GmbH/reusable-github-actions/compare/v1.2.0...v1.2.1) (2026-03-23)
 
 
