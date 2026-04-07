@@ -23,7 +23,7 @@ jobs:
         env:
           MS_TEAMS_URL: ${{ secrets.MS_TEAMS_URL }}
         if: ${{ env.MS_TEAMS_URL != '' }}
-        uses: mikesprague/teams-incoming-webhook-action@v1
+        uses: mikesprague/teams-incoming-webhook-action@v2
         with:
           github-token: ${{ secrets.GH_DEPLOY_TOKEN }}
           webhook-url: ${{ secrets.MS_TEAMS_URL }}
